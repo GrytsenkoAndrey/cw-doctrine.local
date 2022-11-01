@@ -14,3 +14,9 @@ By [Udemy course](https://www.udemy.com/course/doctrine-orm-php/) by Crhis Worfo
 
 <img src="public/img/mapping.png">
 
+## Column types
+
+<img src="public/img/column_types.png">
+
+<img src="public/img/database_mapping.png">
+
