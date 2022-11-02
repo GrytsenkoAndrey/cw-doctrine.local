@@ -19,12 +19,8 @@ class DatabaseFactory
         $metadata = ORMSetup::createAnnotationMetadataConfiguration([__DIR__ . '/../Entity'], $isDevMod);
 
         $dbParams = [
-            'driver' => 'pdo_mysql',
-            'host' => 'localhost',
-            'user' => 'doctrineorm',
-            'password' => 'doctrineorm',
-            'dbname' => 'doctrineorm',
-            'charset' => 'utf8'
+            'driver' => 'pdo_sqlite',
+            'path' => __DIR__ .'/../../database.sqlite'
         ];
 
         return EntityManager::create($dbParams, $metadata);
