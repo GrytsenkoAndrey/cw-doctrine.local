@@ -6,7 +6,24 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class ArticleController
 {
-    public function index(Request $request, Response $response)
+    public function index(Request $request, Response $response, array $args = [])
+    {
+        $article = $this->ci->get('db')
+            ->getRepository('App\Entity\Article')
+            ->findOneBy([
+                'slug' => $args['slug']
+            ]);
+
+        if (! $article) {
+            throw new HttpNotFoundException();
+        }
+
+        return $this->renderPage($response, 'article.html', [
+            'article' => $article
+        ]);
+    }
+
+    public function viewPk(Request $request, Response $response)
     {
         $article = $this->ci->get('db')->find('App\Entity\Article', 1);
 
