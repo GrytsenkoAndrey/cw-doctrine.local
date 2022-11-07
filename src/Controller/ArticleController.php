@@ -33,4 +33,19 @@ class ArticleController
             'article' => $article
         ]);
     }
+
+    public function viewQb(Request $request, Response $response, array $args = [])
+    {
+        $qb = $this->ci->get('db')
+            ->createQueryBuilder();
+        $qb->select('a')
+            ->from('App\Entity\Article', 'a')
+            ->where('a.slug = :slug')
+            ->setParameter('slug', $args['slug']);
+
+        $query = $qb->getQuery();
+        $article = $query->getSingleResult();
+
+        var_dump($article);
+    }
 }
