@@ -48,4 +48,17 @@ class ArticleController
 
         var_dump($article);
     }
+
+    public function edit(Request $request, Response $response, array $args = [])
+    {
+        $article = $this->ci->get('db')->find('App\Entity\Article', [$args['id']]);
+
+        if (! $article) {
+            throw new HttpNotFoundException();
+        }
+
+        return $this->renderPage($response, 'article_edit.html', [
+            'article' => $article
+        ]);
+    }
 }
