@@ -57,6 +57,15 @@ class ArticleController
             throw new HttpNotFoundException();
         }
 
+        if ($request->isPost()) {
+            $article->setName($request->getParam('name'));
+            $article->setImage($request->getParam('image'));
+            $article->setBody($request->getParam('body'));
+
+            $this->ci->get('db')->persist($article);
+            $this->ci->get('db')->flush();
+        }
+
         return $this->renderPage($response, 'article_edit.html', [
             'article' => $article
         ]);
