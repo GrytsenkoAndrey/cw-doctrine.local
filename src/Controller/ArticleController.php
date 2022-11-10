@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -64,9 +65,30 @@ class ArticleController
 
             $this->ci->get('db')->persist($article);
             $this->ci->get('db')->flush();
+
+            return $response->withRedirect('/admin');
         }
 
         return $this->renderPage($response, 'article_edit.html', [
+            'article' => $article
+        ]);
+    }
+
+    public function create(Request $request, Response $response, array $args = [])
+    {
+        $article = new Article();
+
+        if ($request->isPost()) {
+            $article->setName($request->getParam('name'));
+            $article->setSlug($request->getParam('slug'));
+            $article->setImage($request->getParam('image'));
+            $article->setBody($request->getParam('body'));
+
+            $this->ci->get('db')->persist($article);
+            $this->ci->get('db')->flush();
+        }
+
+        return $this->renderPage($response, 'article_create.html', [
             'article' => $article
         ]);
     }
