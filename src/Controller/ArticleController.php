@@ -50,30 +50,6 @@ class ArticleController
         var_dump($article);
     }
 
-    public function edit(Request $request, Response $response, array $args = [])
-    {
-        $article = $this->ci->get('db')->find('App\Entity\Article', [$args['id']]);
-
-        if (! $article) {
-            throw new HttpNotFoundException();
-        }
-
-        if ($request->isPost()) {
-            $article->setName($request->getParam('name'));
-            $article->setImage($request->getParam('image'));
-            $article->setBody($request->getParam('body'));
-
-            $this->ci->get('db')->persist($article);
-            $this->ci->get('db')->flush();
-
-            return $response->withRedirect('/admin');
-        }
-
-        return $this->renderPage($response, 'article_edit.html', [
-            'article' => $article
-        ]);
-    }
-
     public function create(Request $request, Response $response, array $args = [])
     {
         $article = new Article();
@@ -89,6 +65,36 @@ class ArticleController
         }
 
         return $this->renderPage($response, 'article_create.html', [
+            'article' => $article
+        ]);
+    }
+
+    public function edit(Request $request, Response $response, array $args = [])
+    {
+        $article = $this->ci->get('db')->find('App\Entity\Article', [$args['id']]);
+
+        if (! $article) {
+            throw new HttpNotFoundException();
+        }
+
+        if ($request->isPost()) {
+            if ($request->getParam('action') === 'delete') {
+                $this->ci->get('db')->remove($article);
+                $this->ci->get('db')->flush();
+
+                return $response->withRedirect('/admin');
+            }
+            $article->setName($request->getParam('name'));
+            $article->setImage($request->getParam('image'));
+            $article->setBody($request->getParam('body'));
+
+            $this->ci->get('db')->persist($article);
+            $this->ci->get('db')->flush();
+
+            return $response->withRedirect('/admin');
+        }
+
+        return $this->renderPage($response, 'article_edit.html', [
             'article' => $article
         ]);
     }
